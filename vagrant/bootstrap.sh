@@ -13,6 +13,7 @@ ln -sf /usr/lib/go-${GO_VERSION}/bin/* /usr/local/bin/
 rm -f /etc/nginx/sites-enabled/* /etc/nginx/sites-available/*
 ln -sf /vagrant/vagrant/chat4me-server.nginx /etc/nginx/sites-enabled/
 rm -rf /var/www/*
+ln -sf /vagrant/html /var/www/
 
 # VirtualBox shared folders don't play nicely with sendfile.
 sed -e 's/sendfile on;/sendfile off;/' -i /etc/nginx/nginx.conf
@@ -33,4 +34,7 @@ systemctl enable nginx
 systemctl restart nginx &
 wait
 
-echo "Chat 4 Me routing server is set up!
+cd /vagrant/chat4me-router
+go build
+
+echo "Done setting up chat4me-router. You can access it for development at https://192.168.56.4/"
