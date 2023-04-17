@@ -29,6 +29,10 @@ func initConfig() {
 	if err = json.Unmarshal(ba, &cfg); err != nil {
 		log.Fatalf("Error parsing config file %s: %s", cfgFilePath, err.Error())
 	}
+
+	if err = cfg.validate(); err != nil {
+		log.Fatalf("Error validating config file %s: %s", cfgFilePath, err.Error())
+	}
 }
 
 func main() {
