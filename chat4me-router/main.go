@@ -20,10 +20,12 @@ func initConfig() {
 		log.Fatalf("Error opening config file %s: %s", cfgFilePath, err.Error())
 	}
 	defer cfgFile.Close()
+
 	ba, err := io.ReadAll(cfgFile)
 	if err != nil {
 		log.Fatalf("Error reading config file %s: %s", cfgFilePath, err.Error())
 	}
+
 	if err = json.Unmarshal(ba, &cfg); err != nil {
 		log.Fatalf("Error parsing config file %s: %s", cfgFilePath, err.Error())
 	}
@@ -37,4 +39,5 @@ func main() {
 		log.Fatalln("Error getting working directory:", err.Error())
 	}
 	initConfig()
+	initServer()
 }
