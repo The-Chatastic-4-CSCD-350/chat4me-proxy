@@ -5,18 +5,29 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
-func initServer() {
+func initServer(startedSignal chan bool) {
 	server.addr = "127.0.0.1:8888"
-	err := http.ListenAndServe(server.addr, &server)
-	if err != nil {
-		log.Fatalf("Error listening on %s: %s", server.addr, err.Error())
-	}
+	server.signal = make(chan os.Signal, 1)
+	signal.Notify(server.signal, syscall.SIGINT, syscall.SIGTERM, os.Interrupt)
+
+	go func() {
+		startedSignal <- true
+		err := http.ListenAndServe(server.addr, &server)
+		if err != nil {
+			log.Fatalf("Error listening on %s: %s", server.addr, err.Error())
+		}
+	}()
+	<-server.signal
 }
 
 type c4mrServer struct {
-	addr string
+	addr   string
+	signal chan os.Signal
 }
 
 func (s *c4mrServer) getRealIP(request *http.Request) string {

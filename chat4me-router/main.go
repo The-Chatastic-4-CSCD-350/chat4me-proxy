@@ -43,5 +43,5 @@ func main() {
 		log.Fatalln("Error getting working directory:", err.Error())
 	}
 	initConfig()
-	initServer()
+	initServer(nil)
 }
