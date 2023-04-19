@@ -68,13 +68,11 @@ func (s *c4mrServer) logAccess(httpStatus int, request *http.Request, extra ...s
 
 func (s *c4mrServer) serveCompletion(writer http.ResponseWriter, request bunrouter.Request) error {
 	writer.Header().Set("Content-Type", "application/json")
-	if request.Header.Get("X-C4m") != "y" {
-		return s.serveBadRequestError(writer, request.Request, "")
-	}
+	// if request.Header.Get("X-C4m") != "y" {
+	// 	return s.serveBadRequestError(writer, request.Request, "")
+	// }
 	if oaiClient == nil {
-		writer.WriteHeader(http.StatusInternalServerError)
-		s.logAccess(http.StatusInternalServerError, request.Request)
-		return json.NewEncoder(writer).Encode(ErrOAIClientNotInitialized)
+		initOpenAI()
 	}
 	return nil
 }
@@ -86,5 +84,5 @@ func (s *c4mrServer) ServeHTTP(writer http.ResponseWriter, request *http.Request
 	// err := json.NewDecoder(request.Body).Decode(&req)
 
 	encoder := json.NewEncoder(writer)
-	encoder.Encode("Hello from the router!")
+	encoder.Encode("Hello from the request proxy!")
 }

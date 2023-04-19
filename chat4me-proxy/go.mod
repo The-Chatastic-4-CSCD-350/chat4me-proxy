@@ -1,4 +1,4 @@
-module github.com/joshmerrell/chat4me-router
+module github.com/joshmerrell/chat4me-proxy
 
 go 1.18
 

@@ -36,7 +36,7 @@ func initConfig() {
 }
 
 func main() {
-	log.Println("Initializing Chat 4 Me request router")
+	log.Println("Initializing Chat 4 Me request proxy")
 	cfg = c4mrConfig{}
 	var err error
 	if cfg.workingDir, err = os.Getwd(); err != nil {

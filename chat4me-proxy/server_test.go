@@ -18,7 +18,7 @@ func initTestServer() {
 func TestServerRequestOK(t *testing.T) {
 	initTestServer()
 	t.Log("Server started, continuing with test")
-	req, err := http.NewRequest("GET", "http://127.0.0.1:8888", nil)
+	req, err := http.NewRequest("GET", "http://127.0.0.1:8888/c4m/completion", nil)
 	if err != nil {
 		t.Fatal(err.Error())
 	}

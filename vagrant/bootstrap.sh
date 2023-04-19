@@ -11,7 +11,7 @@ apt-get -y install git nginx golang-${GO_VERSION}
 ln -sf /usr/lib/go-${GO_VERSION}/bin/* /usr/local/bin/
 
 rm -f /etc/nginx/sites-enabled/* /etc/nginx/sites-available/*
-ln -sf /vagrant/vagrant/chat4me-server.nginx /etc/nginx/sites-enabled/
+ln -sf /vagrant/vagrant/chat4me-proxy.nginx /etc/nginx/sites-enabled/
 rm -rf /var/www/*
 ln -sf /vagrant/html /var/www/
 
@@ -34,7 +34,7 @@ systemctl enable nginx
 systemctl restart nginx &
 wait
 
-cd /vagrant/chat4me-router
+cd /vagrant/chat4me-proxy
 go build
 
-echo "Done setting up chat4me-router. You can access it for development at https://192.168.56.4/"
+echo "Done setting up chat4me-proxy. You can access it for development at https://192.168.56.4/"
