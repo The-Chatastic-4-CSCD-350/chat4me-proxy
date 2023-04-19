@@ -43,5 +43,6 @@ func main() {
 		log.Fatalln("Error getting working directory:", err.Error())
 	}
 	initConfig()
+	initOpenAI()
 	initServer(nil)
 }
