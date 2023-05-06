@@ -96,7 +96,9 @@ func (s *c4mrServer) serveCompletion(writer http.ResponseWriter, request bunrout
 		s.logAccess(http.StatusInternalServerError, request.Request, "Error in doCompletion():", err.Error())
 		return err
 	}
-	return json.NewEncoder(writer).Encode(response.Choices[0].Text)
+	json.NewEncoder(writer).Encode(strings.TrimSpace(response.Choices[0].Text))
+	s.logAccess(http.StatusOK, request.Request, "Completion request")
+	return nil
 }
 
 func (s *c4mrServer) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
