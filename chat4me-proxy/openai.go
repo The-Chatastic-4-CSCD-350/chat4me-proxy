@@ -13,7 +13,7 @@ var (
 
 func doCompletion(promptString string) (openai.CompletionResponse, error) {
 	req := openai.CompletionRequest{
-		Model:            openai.GPT3Dot5Turbo,
+		Model:            openai.GPT3Babbage,
 		Prompt:           promptString + "\nYou:",
 		Temperature:      0.5,
 		MaxTokens:        60,
