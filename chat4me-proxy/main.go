@@ -1,39 +1,14 @@
 package main
 
 import (
-	"encoding/json"
-	"io"
 	"log"
 	"os"
-	"path"
 )
 
 var (
 	cfg    c4mrConfig
 	server c4mrServer
 )
-
-func initConfig() {
-	cfgFile, err := os.Open("config.json")
-	cfgFilePath := path.Join(cfg.workingDir, "config.json")
-	if err != nil {
-		log.Fatalf("Error opening config file %s: %s", cfgFilePath, err.Error())
-	}
-	defer cfgFile.Close()
-
-	ba, err := io.ReadAll(cfgFile)
-	if err != nil {
-		log.Fatalf("Error reading config file %s: %s", cfgFilePath, err.Error())
-	}
-
-	if err = json.Unmarshal(ba, &cfg); err != nil {
-		log.Fatalf("Error parsing config file %s: %s", cfgFilePath, err.Error())
-	}
-
-	if err = cfg.validate(); err != nil {
-		log.Fatalf("Error validating config file %s: %s", cfgFilePath, err.Error())
-	}
-}
 
 func main() {
 	log.Println("Initializing Chat 4 Me request proxy")

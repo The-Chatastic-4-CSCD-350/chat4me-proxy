@@ -1,6 +1,13 @@
 package main
 
-import "errors"
+import (
+	"encoding/json"
+	"errors"
+	"io"
+	"log"
+	"os"
+	"path"
+)
 
 var (
 	ErrMissingAPIKey = errors.New("missing API key from config file")
@@ -18,4 +25,26 @@ func (c *c4mrConfig) validate() error {
 		return ErrMissingAPIKey
 	}
 	return nil
+}
+
+func initConfig() {
+	cfgFile, err := os.Open("config.json")
+	cfgFilePath := path.Join(cfg.workingDir, "config.json")
+	if err != nil {
+		log.Fatalf("Error opening config file %s: %s", cfgFilePath, err.Error())
+	}
+	defer cfgFile.Close()
+
+	ba, err := io.ReadAll(cfgFile)
+	if err != nil {
+		log.Fatalf("Error reading config file %s: %s", cfgFilePath, err.Error())
+	}
+
+	if err = json.Unmarshal(ba, &cfg); err != nil {
+		log.Fatalf("Error parsing config file %s: %s", cfgFilePath, err.Error())
+	}
+
+	if err = cfg.validate(); err != nil {
+		log.Fatalf("Error validating config file %s: %s", cfgFilePath, err.Error())
+	}
 }
