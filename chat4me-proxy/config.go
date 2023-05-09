@@ -19,7 +19,7 @@ type c4mrConfig struct {
 	APIKey         string `json:"apiKey"`
 	OrganizationID string `json:"organizationID"`
 	LogDir         string `json:"logDir"`
-	LogToStdOut    bool   `json:"logToStdOut"`
+	Verbose        bool   `json:"verbose"`
 
 	workingDir string
 	logFile    *os.File
@@ -66,7 +66,7 @@ func initConfig() {
 		log.Fatalf("Error opening log file %s: %s", logPath, err.Error())
 	}
 	logWriter = cfg.logFile
-	if cfg.LogToStdOut {
+	if cfg.Verbose {
 		logWriter = io.MultiWriter(cfg.logFile, os.Stdout)
 	}
 	logger = log.New(logWriter, "[c4m]", log.Flags())
