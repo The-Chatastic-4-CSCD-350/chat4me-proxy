@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -30,7 +29,7 @@ func initServer(startedSignal chan bool) {
 		}
 		err := http.ListenAndServe(server.addr, server.router)
 		if err != nil {
-			log.Fatalf("Error listening on %s: %s", server.addr, err.Error())
+			logger.Fatalf("Error listening on %s: %s", server.addr, err.Error())
 		}
 	}()
 	<-server.signal
@@ -58,15 +57,15 @@ func (s *c4mrServer) serveNotFoundJSON(writer http.ResponseWriter, request bunro
 	return json.NewEncoder(writer).Encode(ErrUnrecognizedRequest)
 }
 
-func (s *c4mrServer) serveBadRequestError(writer http.ResponseWriter, request *http.Request, errorMessage string) error {
-	s.logAccess(http.StatusBadRequest, request)
+func (s *c4mrServer) serveBadRequestError(writer http.ResponseWriter, request *http.Request, errorMessage string, extraLogging ...string) error {
+	s.logAccess(http.StatusBadRequest, request, extraLogging...)
 	writer.Header().Set("Content-Type", "application/json")
 	writer.WriteHeader(http.StatusBadRequest)
 	return json.NewEncoder(writer).Encode(errorJSON{Status: "error", Message: errorMessage})
 }
 
 func (s *c4mrServer) logAccess(httpStatus int, request *http.Request, extra ...string) {
-	log.Printf("%s (%d %s) %q from %s, UA: %q %s",
+	logger.Printf("%s (%d %s) %q from %s, UA: %q %s",
 		request.Method, httpStatus, http.StatusText(httpStatus),
 		request.RequestURI, s.getRealIP(request), request.UserAgent(), strings.Join(extra, " "),
 	)
@@ -75,14 +74,14 @@ func (s *c4mrServer) logAccess(httpStatus int, request *http.Request, extra ...s
 func (s *c4mrServer) serveCompletion(writer http.ResponseWriter, request bunrouter.Request) error {
 	writer.Header().Set("Content-Type", "application/json")
 	if request.Header.Get("X-C4m") != "y" {
-		return s.serveBadRequestError(writer, request.Request, http.StatusText(http.StatusBadRequest))
+		return s.serveBadRequestError(writer, request.Request, http.StatusText(http.StatusBadRequest), "missing X-C4m header")
 	}
 	if oaiClient == nil {
 		initOpenAI()
 	}
 	messages := request.PostFormValue("messages")
 	if messages == "" {
-		return s.serveBadRequestError(writer, request.Request, http.StatusText(http.StatusBadRequest))
+		return s.serveBadRequestError(writer, request.Request, http.StatusText(http.StatusBadRequest), "missing messages form")
 	}
 	response, err := doCompletion(messages)
 	if err != nil {

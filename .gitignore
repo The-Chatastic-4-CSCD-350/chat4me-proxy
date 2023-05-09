@@ -1,3 +1,4 @@
 .vagrant/
 chat4me-proxy/chat4me-proxy*
 config.json
+*.log

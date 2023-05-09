@@ -17,6 +17,7 @@ func main() {
 	if cfg.workingDir, err = os.Getwd(); err != nil {
 		log.Fatalln("Error getting working directory:", err.Error())
 	}
+	defer cfg.close()
 	initConfig()
 	initOpenAI()
 	initServer(nil)

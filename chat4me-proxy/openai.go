@@ -20,7 +20,7 @@ func doCompletion(promptString string) (openai.CompletionResponse, error) {
 		TopP:             1.0,
 		FrequencyPenalty: 1.0,
 		PresencePenalty:  0.0,
-		Stop:             []string{"You:", "You: "},
+		Stop:             []string{"You:"},
 	}
 	return oaiClient.CreateCompletion(context.Background(), req)
 }
