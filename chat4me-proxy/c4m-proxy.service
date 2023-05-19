@@ -1,0 +1,11 @@
+[Unit]
+Description=Chat 4 Me proxy server
+Wants=nginx.service
+After=nginx.service
+
+[Service]
+WorkingDirectory=/path/to/chat4me-proxy/
+ExecStart=/path/to/chat4me-proxy/chat4me-proxy
+
+[Install]
+WantedBy=multi-user.target
