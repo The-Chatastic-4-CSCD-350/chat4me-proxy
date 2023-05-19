@@ -95,7 +95,14 @@ func (s *c4mrServer) serveCompletion(writer http.ResponseWriter, request bunrout
 		s.logAccess(http.StatusInternalServerError, request.Request, "Error in doCompletion():", err.Error())
 		return err
 	}
-	json.NewEncoder(writer).Encode(strings.TrimSpace(response.Choices[0].Text))
+	/*
+	 * split the string by newline and only keep the first, for some reason it returns
+	 * You:<expected message>
+	 * Friend:<this shouldn't be here but is>
+	 */
+	completionText := strings.Split(strings.TrimSpace(response.Choices[0].Text), "\n")[0]
+
+	json.NewEncoder(writer).Encode(completionText)
 	s.logAccess(http.StatusOK, request.Request, "Completion request")
 	return nil
 }
