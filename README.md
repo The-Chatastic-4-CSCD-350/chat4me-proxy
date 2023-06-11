@@ -1,5 +1,17 @@
 # Chat 4 Me request proxy server
-This is a server used for act as a proxy for requests from the Chat 4 Me app to forward completion requests to the OpenAI servers and return the results
+This is a server used for act as a proxy for requests from the [Chat 4 Me app](https://github.com/The-Chatastic-4-CSCD-350/Chat-4-Me) to forward completion requests to the OpenAI servers and return the results
+
+# Configuration
+The chat4me-proxy server is configured by editing (or creating) config.json. Currently it is expected to reside in the same directory as the current working directory (so if the executable is run with `./chat4me-proxy`, it will (try to) read `./config.json`.
+## Example config.json
+```JSON
+{
+  "apiKey": "youropenaiapikeyhere",
+  "organizationID": "youropenaiorganizationidhere",
+  "logDir": "./log",
+  "verbose": true
+}
+```
 
 # Instructions for development
 1. Install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/)
